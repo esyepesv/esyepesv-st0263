@@ -9,7 +9,7 @@ app = create_app()
 
 @app.route('/', methods=['GET'])
 def get_users():
-    response = {'message': 'success'}
+    response = {'message': 'services: /find?file={filename} and /list'}
     return jsonify(response), 200, {'Content-Type': 'application/json'}
 
 @app.route('/list', methods=['GET'])
