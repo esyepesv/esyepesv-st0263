@@ -1,11 +1,15 @@
 import os
 from flask import Flask, jsonify
+
+#librerias grpc
 import grpc
 import sys
 sys.path.append('../service1-gRPC')
 import file_service_pb2
 import file_service_pb2_grpc
 
+#librerias mom
+import pika
 
 app = Flask(__name__)
 
@@ -17,14 +21,68 @@ file_service_client = file_service_pb2_grpc.FileServiceStub(channel)
 
 @app.route('/files', methods=['GET'])
 def list_files():
+    try:
+        filenames = list_files_grpc()
+        if not filenames:
+            filenames = list_files_mom()
+        return jsonify(filenames)
+    except:
+        return "Error al obtener los archivos"
+
+
+def list_files_grpc():
     # crear una solicitud de gRPC para obtener la lista de archivos
     request = file_service_pb2.ListFilesRequest()
     # hacer la llamada al servicio de gRPC
     response = file_service_client.ListFiles(request)
     # convertir el campo "filenames" a una lista
-    filenames = list(response.filenames)
-    # devolver la lista de archivos como una respuesta HTTP
-    return jsonify(filenames)
+    return list(response.filenames)
+
+
+def list_files_mom():
+    # crear una conexión con RabbitMQ
+    connection = pika.BlockingConnection(
+        pika.ConnectionParameters('localhost', 5672, '/', pika.PlainCredentials('user', 'password'))
+    )
+    channel = connection.channel()
+
+    # definir un identificador único para la solicitud
+    correlation_id = str(uuid.uuid4())
+
+    # publicar un mensaje en el exchange 'my_exchange' con la clave 'request'
+    channel.basic_publish(
+        exchange='my_exchange',
+        routing_key='request',
+        body='files'.encode(),
+        properties=pika.BasicProperties(
+            reply_to='response',
+            correlation_id=correlation_id
+        )
+    )
+
+    # crear una cola temporal y enlazarla con la clave de correlación
+    result = channel.queue_declare(queue='', exclusive=True)
+    callback_queue = result.method.queue
+    channel.queue_bind(exchange='my_exchange', queue=callback_queue, routing_key=correlation_id)
+
+    # crear una variable para almacenar la respuesta
+    response = None
+
+    # definir una función para procesar los mensajes de respuesta
+    def callback(ch, method, props, body):
+        nonlocal response
+        if props.correlation_id == correlation_id:
+            response = body.decode()
+
+    # consumir mensajes de la cola temporal y esperar a que se reciba la respuesta
+    channel.basic_consume(queue=callback_queue, on_message_callback=callback, auto_ack=True)
+    while response is None:
+        connection.process_data_events()
+
+    # cerrar la conexión y devolver la respuesta
+    connection.close()
+    return response.split(',')
+
 
 
 @app.route('/find/<filename>', methods=['GET'])
