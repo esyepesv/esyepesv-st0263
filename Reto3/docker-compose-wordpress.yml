@@ -8,9 +8,9 @@ services:
     restart: always
     environment:
       WORDPRESS_DB_HOST: <ip-privada>
-      WORDPRESS_DB_USER: exampleuser
-      WORDPRESS_DB_PASSWORD: examplepass
-      WORDPRESS_DB_NAME: exampledb
+      WORDPRESS_DB_USER: user
+      WORDPRESS_DB_PASSWORD: pass
+      WORDPRESS_DB_NAME: db
     volumes:
       - wordpress:/var/www/html
 volumes:
