@@ -1,23 +1,31 @@
 import os
 from flask import Flask, jsonify
-
-#librerias grpc
 import grpc
 import sys
+import pika
+import uuid
+from concurrent import futures
 sys.path.append('../service1-gRPC')
 import file_service_pb2
 import file_service_pb2_grpc
 
-#librerias mom
-import pika
-
 app = Flask(__name__)
 
 # crear un canal de comunicación con el servidor de gRPC
-channel = grpc.insecure_channel('localhost:50051')
-
+grpc_channel = grpc.insecure_channel('localhost:50051')
 # crear un cliente de gRPC para el servicio de FileService
-file_service_client = file_service_pb2_grpc.FileServiceStub(channel)
+file_service_client = file_service_pb2_grpc.FileServiceStub(grpc_channel)
+
+# crear una conexión con RabbitMQ
+mom_connection = pika.BlockingConnection(
+    pika.ConnectionParameters('localhost', 5672, '/', pika.PlainCredentials('user', 'password'))
+)
+mom_channel = mom_connection.channel()
+
+# crear una cola temporal y enlazarla con la clave 'response'
+result = mom_channel.queue_declare(queue='', exclusive=True)
+response_queue = result.method.queue
+mom_channel.queue_bind(exchange='my_exchange', queue=response_queue, routing_key='response')
 
 @app.route('/files', methods=['GET'])
 def list_files():
@@ -29,7 +37,6 @@ def list_files():
     except:
         return "Error al obtener los archivos"
 
-
 def list_files_grpc():
     # crear una solicitud de gRPC para obtener la lista de archivos
     request = file_service_pb2.ListFilesRequest()
@@ -38,32 +45,20 @@ def list_files_grpc():
     # convertir el campo "filenames" a una lista
     return list(response.filenames)
 
-
 def list_files_mom():
-    # crear una conexión con RabbitMQ
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters('localhost', 5672, '/', pika.PlainCredentials('user', 'password'))
-    )
-    channel = connection.channel()
-
     # definir un identificador único para la solicitud
     correlation_id = str(uuid.uuid4())
 
     # publicar un mensaje en el exchange 'my_exchange' con la clave 'request'
-    channel.basic_publish(
+    mom_channel.basic_publish(
         exchange='my_exchange',
         routing_key='request',
         body='files'.encode(),
         properties=pika.BasicProperties(
-            reply_to='response',
+            reply_to=response_queue,
             correlation_id=correlation_id
         )
     )
-
-    # crear una cola temporal y enlazarla con la clave de correlación
-    result = channel.queue_declare(queue='', exclusive=True)
-    callback_queue = result.method.queue
-    channel.queue_bind(exchange='my_exchange', queue=callback_queue, routing_key=correlation_id)
 
     # crear una variable para almacenar la respuesta
     response = None
@@ -75,15 +70,12 @@ def list_files_mom():
             response = body.decode()
 
     # consumir mensajes de la cola temporal y esperar a que se reciba la respuesta
-    channel.basic_consume(queue=callback_queue, on_message_callback=callback, auto_ack=True)
+    mom_channel.basic_consume(queue=response_queue, on_message_callback=callback, auto_ack=True)
     while response is None:
-        connection.process_data_events()
+        mom_connection.process_data_events()
 
-    # cerrar la conexión y devolver la respuesta
-    connection.close()
+    # devolver la respuesta
     return response.split(',')
-
-
 
 @app.route('/find/<filename>', methods=['GET'])
 def file_exists(filename):
