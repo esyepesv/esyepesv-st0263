@@ -1,19 +1,18 @@
 # info de la materia: STxxxx <nombre>
+# info de la materia: ST0263 Topicos especiales en telematica
 #
-# Estudiante(s): nombre, email-eafit
-#
-# Profesor: nombre, email-eafit
-#
-# <para borrar: EL OBJETIVO DE ESTA DOCUMENTACÍON ES QUE CUALQUIER LECTOR CON EL REPO, EN ESPECIAL EL PROFESOR, ENTIENDA EL ALCANCE DE LO DESARROLLADO Y QUE PUEDA REPRODUCIR SIN EL ESTUDIANTE EL AMBIENTE DE DESARROLLO Y EJECUTAR Y USAR LA APLICACIÓN SIN PROBLEMAS>
+## Estudiante: Stiven Yepes Vanegas, esyepesv@eafit.educo
+## Profesor: Edwin Nelson Montoya Munera, emontoya@eafit.edu.co
 
-# <para borrar: renombre este archivo a README.md cuando lo vaya a usar en un caso específico>
-
-# nombre del proyecto, lab o actividad
-#
+# Aplicación Monolítica con Balanceo y Datos Distribuidos (BD y archivos)
+  
 # 1. breve descripción de la actividad
-#
-<texto descriptivo>
+Desplegar un CMS WordPress empleando la tecnología de contenedores en una arquitectura de alta disponibilidad con su propio dominio y certificado SSL. Se utilizará un balanceador de cargas de la capa de aplicación del WordPress, dos servidores adicionales para la base de datos y archivos distribuidos en NFS. Se desplegarán cinco VM en Google GCP para implementar esta arquitectura y mejorar la disponibilidad de la aplicación.
+  
 ## 1.1. Que aspectos cumplió o desarrolló de la actividad propuesta por el profesor (requerimientos funcionales y no funcionales)
+
+  En general se complió con casi todos los requisitos funcionales y no funcionales, excepto con el certificado SSL para la conexion HTPPS. Es decir, se desplegaron las 5 maquinas virtuales en Google Cloud, de las cuales 2 correspondian al CMS WordPress, 1 a la base de datos de mySQL, 1 al servidor NFS de archivos compartidos y 1 al balanceador de cargas de basado en nginx. 3 de estos servicios corren en contenedores de docker (wordpress, base de datos y balanceador de carga)
+  
 
 ## 1.2. Que aspectos NO cumplió o desarrolló de la actividad propuesta por el profesor (requerimientos funcionales y no funcionales)
 
