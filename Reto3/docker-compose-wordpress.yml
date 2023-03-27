@@ -13,5 +13,3 @@ services:
       WORDPRESS_DB_NAME: db
     volumes:
       - /mnt/wordpress:/var/www/html
-volumes:
-  wordpress:
