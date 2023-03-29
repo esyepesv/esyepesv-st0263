@@ -26,11 +26,30 @@ El diseño implementado es el que plantea el profesor en el enunciado:
 # 3. Descripción del ambiente de desarrollo y técnico: lenguaje de programación, librerias, paquetes, etc, con sus numeros de versiones.
 
 ## como se compila y ejecuta.
+
+- La mayoria de los componentes del reto estan montados en contenedores de docker. Para correr estos contenedores se debe ir a la carpeta de cada uno de los componentes y correr el archivo docker-compose.yml: docker-compose -f <nombre del archivo> up.
+
+  
 ## detalles del desarrollo.
+  Todo el desarrollo esta desplegado en la nube de GCP utilizando IaaS, mas especificamente las maquinas virtuales del servicio Compute Engine.Se utilizaron contenedores de docker montados a traves de docker compose para los componentes de la aplicacion en WordPress, la base de datos y el balanceador de carga. Para el servidor NFS se configuró el host directamente en la maquina virtual.
+  
 ## detalles técnicos
+  - Tipo de maquina virtual: e2-Small.
+  - Sistema operativo: Ubuntu 18.04 LTS.
+  - Docker version 20.10.21.
+  - Docker-compose version 1.17.1.
+  - Base de datos: MySQL 5.7.
+  - Balanceador de carga: NGINX.
+  - CMS :WordPress.
+
 ## descripción y como se configura los parámetros del proyecto (ej: ip, puertos, conexión a bases de datos, variables de ambiente, parámetros, etc)
-## opcional - detalles de la organización del código por carpetas o descripción de algún archivo. (ESTRUCTURA DE DIRECTORIOS Y ARCHIVOS IMPORTANTE DEL PROYECTO, comando 'tree' de linux)
-## 
+  
+  
+## Organización del código por carpetas
+![image](https://user-images.githubusercontent.com/60147085/228677957-4e26466c-ac3f-469a-8973-93a21fbe6036.png)
+
+
+
 ## opcionalmente - si quiere mostrar resultados o pantallazos 
 reto3:
 ![image](https://user-images.githubusercontent.com/60147085/228669849-6d3d040d-f158-4f6d-909e-f5a980bbca82.png)
