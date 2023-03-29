@@ -62,9 +62,7 @@ w2:
 # 5. otra información que considere relevante para esta actividad.
 
 # referencias:
-<debemos siempre reconocer los créditos de partes del código que reutilizaremos, así como referencias a youtube, o referencias bibliográficas utilizadas para desarrollar el proyecto o la actividad>
-## sitio1-url 
-## sitio2-url
-## url de donde tomo info para desarrollar este proyecto
+Overview of docker compose CLI: https://docs.docker.com/compose/reference/
+How To Set Up an NFS Mount on Ubuntu 22.04: https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-mount-on-ubuntu-22-04
+How to Connect a Domain to a Server or Hosting: https://www.namecheap.com/support/knowledgebase/article.aspx/9837/46/how-to-connect-a-domain-to-a-server-or-hosting/
 
-#### versión README.md -> 1.0 (2022-agosto)
