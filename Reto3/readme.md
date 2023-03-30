@@ -10,7 +10,9 @@ Desplegar un CMS WordPress empleando la tecnología de contenedores en una arqui
   
 ## 1.1. Que aspectos cumplió o desarrolló de la actividad propuesta por el profesor (requerimientos funcionales y no funcionales)
 
-  En general se complió con casi todos los requisitos funcionales y no funcionales, excepto con el certificado SSL para la conexion HTPPS. Es decir, se desplegaron las 5 maquinas virtuales en Google Cloud, de las cuales 2 correspondian al CMS WordPress, 1 a la base de datos de mySQL, 1 al servidor NFS de archivos compartidos y 1 al balanceador de cargas de basado en nginx. 3 de estos servicios corren en contenedores de docker (wordpress, base de datos y balanceador de carga).
+En general, se cumplieron con la mayoría de los requerimientos funcionales y no funcionales propuestos por el profesor. Sin embargo, no se pudo cumplir con el requisito de implementar un certificado SSL para las conexiones seguras a través de HTTPS.
+
+Se desplegaron las cinco máquinas virtuales en Google Cloud, de las cuales dos correspondían al CMS WordPress, una a la base de datos MySQL, una al servidor NFS de archivos compartidos y una al balanceador de cargas basado en Nginx. Tres de estos servicios corren en contenedores de Docker (WordPress, base de datos y balanceador de carga).
   
 
 ## 1.2. Que aspectos NO cumplió o desarrolló de la actividad propuesta por el profesor (requerimientos funcionales y no funcionales)
@@ -27,11 +29,11 @@ El diseño implementado es el que plantea el profesor en el enunciado:
 
 ## como se compila y ejecuta.
 
-- La mayoria de los componentes del reto estan montados en contenedores de docker. Para correr estos contenedores se debe ir a la carpeta de cada uno de los componentes y correr el archivo docker-compose.yml: docker-compose -f <nombre del archivo> up.
+- La mayoría de los componentes del reto están montados en contenedores de Docker. Para correr estos contenedores, se debe ir a la carpeta de cada uno de los componentes y ejecutar el archivo docker-compose.yml con el comando ´docker-compose -f <nombre del archivo> up´.
 
   
 ## detalles del desarrollo.
-  Todo el desarrollo esta desplegado en la nube de GCP utilizando IaaS, mas especificamente las maquinas virtuales del servicio Compute Engine.Se utilizaron contenedores de docker montados a traves de docker compose para los componentes de la aplicacion en WordPress, la base de datos y el balanceador de carga. Para el servidor NFS se configuró el host directamente en la maquina virtual.
+  Todo el desarrollo está desplegado en la nube de Google Cloud Platform (GCP) utilizando IaaS, específicamente las máquinas virtuales del servicio Compute Engine. Se utilizaron contenedores de Docker montados a través de Docker Compose para los componentes de la aplicación en WordPress, la base de datos y el balanceador de carga. Para el servidor NFS, se configuró el host directamente en la máquina virtual.
   
 ## detalles técnicos
   - Tipo de maquina virtual: e2-Small.
@@ -43,14 +45,45 @@ El diseño implementado es el que plantea el profesor en el enunciado:
   - CMS :WordPress.
 
 ## descripción y como se configura los parámetros del proyecto (ej: ip, puertos, conexión a bases de datos, variables de ambiente, parámetros, etc)
-  
+  Los diferentes parámetros se configuran en los archivos de Docker Compose, donde se especifica la dirección IP, los puertos, la conexión a la base de datos, las variables de ambiente, entre otros. Se pueden editar estos parámetros según las necesidades de cada caso.
+  ![image](https://user-images.githubusercontent.com/60147085/228716276-43859d68-8286-42c4-b63e-20bc9c9682cc.png)
+
   
 ## Organización del código por carpetas
+  El código está organizado en varias carpetas, como se muestra en la siguiente imagen:
+  
 ![image](https://user-images.githubusercontent.com/60147085/228677957-4e26466c-ac3f-469a-8973-93a21fbe6036.png)
 
 
+## Resultados o pantallazos 
+  
+  Maquinas virtuales configuradas corriendo:
+  ![image](https://user-images.githubusercontent.com/60147085/228716522-5cbb943d-6982-4c3b-9d60-bee0b515e567.png)
 
-## opcionalmente - si quiere mostrar resultados o pantallazos 
+
+
+# 4. Descripción del ambiente de EJECUCIÓN (en producción) lenguaje de programación, librerias, paquetes, etc, con sus numeros de versiones.
+
+## IP o nombres de dominio en nube o en la máquina servidor.
+  - IPs:
+  LB: 34.30.3.196
+  wordpress1:35.223.171.80
+  wordpress2: 130.211.215.101
+  
+  - Dominio: reto3.stivenyepes.lat
+  
+    para hacer pruebas se estableció un dominio para acceder directamente a cada una de las instancias de wordpress:
+    w1.stivenyepes.lat -
+    w2.stivenyepes.lat
+
+## como se lanza el servidor.
+  Para lanzar el servidor solamente es necesario iniciar las maquinas virtuales en GCP.
+
+## una mini guia de como un usuario utilizaría el software o la aplicación
+El usuario debe entrar al dominio reto3.stivenyepes.lat, donde encontrará una página de "Hola mundo" de WordPress.
+
+## Resultados o pantallazos 
+
 reto3:
 ![image](https://user-images.githubusercontent.com/60147085/228669849-6d3d040d-f158-4f6d-909e-f5a980bbca82.png)
 
@@ -60,25 +93,6 @@ w1:
 w2:
 ![image](https://user-images.githubusercontent.com/60147085/228669924-597f8373-94ce-4fa9-bcfb-4f607b4d7c90.png)
 
-
-# 4. Descripción del ambiente de EJECUCIÓN (en producción) lenguaje de programación, librerias, paquetes, etc, con sus numeros de versiones.
-
-# IP o nombres de dominio en nube o en la máquina servidor.
-
-## descripción y como se configura los parámetros del proyecto (ej: ip, puertos, conexión a bases de datos, variables de ambiente, parámetros, etc)
-
-## como se lanza el servidor.
-
-## una mini guia de como un usuario utilizaría el software o la aplicación
-
-## opcionalmente - si quiere mostrar resultados o pantallazos 
-
-
-
-
-
-
-# 5. otra información que considere relevante para esta actividad.
 
 # referencias:
 Overview of docker compose CLI: https://docs.docker.com/compose/reference/
