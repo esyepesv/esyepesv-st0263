@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  moodle:
+    image: bitnami/moodle:latest
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - moodle:/bitnami/moodle
+    environment:
+      MOODLE_DATABASE_HOST: 104.154.189.62
+      MOODLE_DATABASE_NAME: db
+      MOODLE_DATABASE_USER: root
+      MOODLE_DATABASE_PASSWORD: ' '
+
+volumes:
+  moodle:
