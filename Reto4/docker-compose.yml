@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - db:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: moodle
+      MYSQL_USER: moodleuser
+      MYSQL_PASSWORD: moodlepass
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+
+  moodle:
+    image: bitnami/moodle:latest
+    ports:
+      - '80:80'
+    volumes:
+      - moodle:/bitnami/moodle
+    environment:
+      MOODLE_DATABASE_HOST: db
+      MOODLE_DATABASE_NAME: moodle
+      MOODLE_DATABASE_USER: moodleuser
+      MOODLE_DATABASE_PASSWORD: moodlepass
+    depends_on:
+        - db
+volumes:
+  db:
+  moodle:
