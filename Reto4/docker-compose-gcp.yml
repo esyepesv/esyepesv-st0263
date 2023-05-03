@@ -13,6 +13,6 @@ services:
       MOODLE_DATABASE_NAME: db
       MOODLE_DATABASE_USER: root
       MOODLE_DATABASE_PASSWORD: ' '
-
+      
 volumes:
   moodle:
